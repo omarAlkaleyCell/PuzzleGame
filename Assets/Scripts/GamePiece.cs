@@ -23,7 +23,7 @@ public class GamePiece : MonoBehaviour
 	private void Awake()
 	{
 		mainCamera = Camera.main;
-		gridManager = FindObjectOfType<GridManager>();
+		gridManager = FindFirstObjectByType<GridManager>();
 		blocks = GetComponentsInChildren<PieceBlock>();
 		originalPosition = transform.position;
 		SetupPiece();
@@ -33,21 +33,25 @@ public class GamePiece : MonoBehaviour
 	{
 		currentShape = PieceShapes.GetShape(pieceType);
 
-		// Position blocks according to shape
-		for (int i = 0; i < blocks.Length && i < currentShape.Length; i++)
+		// Position and activate only the blocks we need
+		for (int i = 0; i < blocks.Length; i++)
 		{
-			blocks[i].transform.localPosition = new Vector3(
-				currentShape[i].x * 0.8f ,
-				currentShape[i].y * 0.8f ,
-				0
-			);
-			blocks[i].SetColor(pieceColor);
-		}
-
-		// Disable extra blocks if any
-		for (int i = currentShape.Length; i < blocks.Length; i++)
-		{
-			blocks[i].gameObject.SetActive(false);
+			if (i < currentShape.Length)
+			{
+				// Activate and position the block
+				blocks[i].gameObject.SetActive(true);
+				blocks[i].transform.localPosition = new Vector3(
+					currentShape[i].x * 0.8f ,
+					currentShape[i].y * 0.8f ,
+					0
+				);
+				blocks[i].SetColor(pieceColor);
+			}
+			else
+			{
+				// Disable extra blocks
+				blocks[i].gameObject.SetActive(false);
+			}
 		}
 	}
 

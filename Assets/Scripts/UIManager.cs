@@ -1,12 +1,13 @@
 using UnityEngine;
+using TMPro;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
 	[Header("UI Elements")]
-	public Text scoreText;
+	public TextMeshProUGUI scoreText;
 	public GameObject gameOverPanel;
-	public Text finalScoreText;
+	public TextMeshProUGUI finalScoreText;
 	public Button restartButton;
 	public Button mainMenuButton;
 

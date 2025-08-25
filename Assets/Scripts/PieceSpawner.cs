@@ -8,7 +8,7 @@ public class PieceSpawner : MonoBehaviour
 	public Color[] pieceColors;
 
 	[Header("Piece Settings")]
-	public PieceType[] availablePieces = { PieceType.LShape , PieceType.Line3 , PieceType.Line4 , PieceType.Square };
+	public PieceType[] availablePieces = { PieceType.LShape , PieceType.Line3 , PieceType.Line4 , PieceType.Square, PieceType.Plane};
 
 	private GamePiece[] currentPieces;
 
@@ -44,7 +44,7 @@ public class PieceSpawner : MonoBehaviour
 		// Set random type and color
 		piece.pieceType = availablePieces[Random.Range(0 , availablePieces.Length)];
 		piece.pieceColor = pieceColors[Random.Range(0 , pieceColors.Length)];
-
+		piece.SetupPiece(piece.pieceType , piece.pieceColor);
 		return piece;
 	}
 

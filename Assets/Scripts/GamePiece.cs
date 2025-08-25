@@ -26,10 +26,9 @@ public class GamePiece : MonoBehaviour
 		gridManager = FindFirstObjectByType<GridManager>();
 		blocks = GetComponentsInChildren<PieceBlock>();
 		originalPosition = transform.position;
-		SetupPiece();
 	}
 
-	private void SetupPiece()
+	public void SetupPiece(PieceType pieceType, Color pieceColor)
 	{
 		currentShape = PieceShapes.GetShape(pieceType);
 
@@ -41,8 +40,8 @@ public class GamePiece : MonoBehaviour
 				// Activate and position the block
 				blocks[i].gameObject.SetActive(true);
 				blocks[i].transform.localPosition = new Vector3(
-					currentShape[i].x * 0.8f ,
-					currentShape[i].y * 0.8f ,
+					currentShape[i].x * 0.6f ,
+					currentShape[i].y * 0.6f ,
 					0
 				);
 				blocks[i].SetColor(pieceColor);

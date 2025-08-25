@@ -5,7 +5,8 @@ public enum PieceType
 	LShape,
 	Line3,
 	Line4,
-	Square
+	Square,
+	Plane
 }
 
 public static class PieceShapes
@@ -49,6 +50,14 @@ public static class PieceShapes
 					new Vector2Int(1, 1)
 				};
 
+			case PieceType.Plane:
+				return new Vector2Int[]
+				{
+					new Vector2Int(0, 0),
+					new Vector2Int(1, 0),
+					new Vector2Int(2, 0),
+					new Vector2Int(1, 1)
+				};
 			default:
 				return new Vector2Int[] { Vector2Int.zero };
 		}

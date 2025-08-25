@@ -1,15 +1,13 @@
 using UnityEngine;
 using System.Collections.Generic;
 
+[DefaultExecutionOrder(-100)]
 public class GridManager : MonoBehaviour
 {
 	[Header("Grid Settings")]
 	public int gridWidth = 8;
 	public int gridHeight = 10;
 	public float cellSize = 0.8f;
-	public Color gridLineStartColor = Color.gray;
-	public Color gridLineEndColor = Color.white;
-	public float gridLineWidth = 0.02f;
 
 	[Header("Prefabs")]
 	public GameObject cellPrefab;
@@ -18,74 +16,103 @@ public class GridManager : MonoBehaviour
 	private GridCell[,] grid;
 	private Vector2 gridOffset;
 
+	[Header("Positioning")]
+	public bool centerInCamera = true;
+	public float topUISpace = 100f;      // Pixels reserved for score UI
+	public float bottomUISpace = 150f;   // Pixels reserved for pieces
+	public Vector2 manualOffset = Vector2.zero; // Manual fine-tuning
+	private Camera mainCamera;
 	public void Initialize()
 	{
+		mainCamera = Camera.main;
+		OptimizeForMobile();
 		CreateGrid();
-		DrawGridLines();
 		CalculateGridOffset();
+		CenterGridInCamera();
+	}
+
+	private void CenterGridInCamera()
+	{
+		if (!centerInCamera || mainCamera == null) return;
+
+		// Convert UI space from pixels to world units
+		float pixelsPerUnit = 100f; // Adjust based on your sprite settings
+		float topSpaceWorld = topUISpace / pixelsPerUnit;
+		float bottomSpaceWorld = bottomUISpace / pixelsPerUnit;
+
+		// Calculate available screen space
+		float cameraHeight = mainCamera.orthographicSize * 2f;
+		float availableHeight = cameraHeight - topSpaceWorld - bottomSpaceWorld;
+
+		// Calculate grid center position
+		Vector3 gridCenter = new Vector3(
+			( gridWidth - 1 ) * cellSize * 0.5f ,
+			( gridHeight - 1 ) * cellSize * 0.5f ,
+			0
+		);
+
+		// Position grid in available space
+		Vector3 targetPosition = new Vector3(
+			-gridCenter.x + manualOffset.x ,
+			-gridCenter.y + ( bottomSpaceWorld - topSpaceWorld ) * 0.5f + manualOffset.y ,
+			0
+		);
+
+		transform.position = targetPosition;
+
+		Debug.Log($"Grid positioned at: {targetPosition}");
+	}
+
+	private void OptimizeForMobile()
+	{
+		if (Application.isMobilePlatform)
+		{
+			// Adjust cell size for mobile screens
+			float screenWidth = Screen.width;
+			float screenHeight = Screen.height;
+
+			// Calculate optimal cell size
+			float maxCellSizeForWidth = ( screenWidth * 0.8f ) / gridWidth / 100f;  // 80% of screen width
+			float maxCellSizeForHeight = ( screenHeight * 0.6f ) / gridHeight / 100f;  // 60% of screen height
+
+			cellSize = Mathf.Min(cellSize , maxCellSizeForWidth , maxCellSizeForHeight);
+			Debug.Log($"Mobile optimization: Cell size adjusted to {cellSize:F2}");
+		}
 	}
 
 	private void CreateGrid()
 	{
+		if (cellPrefab == null)
+		{
+			Debug.LogError("Cell Prefab is not assigned in GridManager!");
+			return;
+		}
+
 		grid = new GridCell[gridWidth , gridHeight];
 
 		for (int x = 0; x < gridWidth; x++)
 		{
 			for (int y = 0; y < gridHeight; y++)
 			{
+				// Position cells so they align with grid lines
 				Vector3 position = new Vector3(x * cellSize , y * cellSize , 0);
 				GameObject cellObj = Instantiate(cellPrefab , position , Quaternion.identity , transform);
+
+				// Make sure cell sprite is exactly cellSize
+				SpriteRenderer sr = cellObj.GetComponent<SpriteRenderer>();
+				if (sr != null)
+				{
+					sr.size = new Vector2(cellSize , cellSize);
+				}
+
 				GridCell cell = cellObj.GetComponent<GridCell>();
-				cell.Initialize(x , y);
-				grid[x , y] = cell;
+				if (cell != null)
+				{
+					cell.Initialize(x , y);
+					grid[x , y] = cell;
+				}
 			}
 		}
-	}
-
-	private void DrawGridLines()
-	{
-		// Vertical lines
-		for (int x = 0; x <= gridWidth; x++)
-		{
-			Vector3 start = new Vector3(x * cellSize - cellSize / 2 , -cellSize / 2 , -0.1f);
-			Vector3 end = new Vector3(x * cellSize - cellSize / 2 , ( gridHeight - 0.5f ) * cellSize , -0.1f);
-			CreateGridLine(start , end);
-		}
-
-		// Horizontal lines
-		for (int y = 0; y <= gridHeight; y++)
-		{
-			Vector3 start = new Vector3(-cellSize / 2 , y * cellSize - cellSize / 2 , -0.1f);
-			Vector3 end = new Vector3(( gridWidth - 0.5f ) * cellSize , y * cellSize - cellSize / 2 , -0.1f);
-			CreateGridLine(start , end);
-		}
-	}
-
-	private void CreateGridLine( Vector3 start , Vector3 end )
-	{
-		GameObject line = Instantiate(gridLinePrefab , transform);
-		LineRenderer lr = line.GetComponent<LineRenderer>();
-
-		// Configure line renderer properties
-		lr.positionCount = 2;
-		lr.SetPosition(0 , start);
-		lr.SetPosition(1 , end);
-
-		// Set gradient colors
-		Gradient gradient = new Gradient();
-		gradient.SetKeys(
-			new GradientColorKey[] { new GradientColorKey(gridLineStartColor , 0.0f) , new GradientColorKey(gridLineEndColor , 1.0f) } ,
-			new GradientAlphaKey[] { new GradientAlphaKey(1.0f , 0.0f) , new GradientAlphaKey(1.0f , 1.0f) }
-		);
-		lr.colorGradient = gradient;
-
-		// Set line width
-		lr.startWidth = gridLineWidth;
-		lr.endWidth = gridLineWidth;
-
-		// Ensure proper sorting and material
-		lr.sortingOrder = -1;
-		lr.useWorldSpace = true;
 	}
 
 	private void CalculateGridOffset()

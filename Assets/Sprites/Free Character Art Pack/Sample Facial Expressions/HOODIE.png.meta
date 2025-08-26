@@ -1,12 +1,5 @@
 fileFormatVersion: 2
 guid: e3b512290788f8c4ea25350e5e12c7ed
-AssetOrigin:
-  serializedVersion: 1
-  productId: 303256
-  packageName: Free Character Art Pack
-  packageVersion: 1.0
-  assetPath: Assets/Free Character Art Pack/Sample Facial Expressions/HOODIE.png
-  uploadId: 719691
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -113,19 +106,6 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: Android
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites: []
@@ -148,3 +128,10 @@ TextureImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 303256
+  packageName: Free Character Art Pack
+  packageVersion: 1.0
+  assetPath: Assets/Sprites/Free Character Art Pack/Sample Facial Expressions/HOODIE.png
+  uploadId: 719691

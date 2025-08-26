@@ -13,10 +13,23 @@ public class GameManager : MonoBehaviour
 	[Header("Game Settings")]
 	public int baseScorePerLine = 100;
 	public int comboMultiplier = 50;
+	public int scorePerLevel = 1000;
 
 	private int currentScore = 0;
+	private int currentLevel = 1;
 	private bool isGameOver = false;
 
+	[Header("SFX")]
+	public AudioClip[] addScoreClips;
+	public AudioClip placingClip;
+	public AudioClip[] levelUpClips;
+	public AudioClip GameOverClip;
+	public AudioSource sfxSource;
+	public AudioSource sfx2Source;
+	
+	[Header("Music")]
+	public AudioClip[] musicClips;
+	public AudioSource musicSource;
 	public static GameManager Instance { get; private set; }
 
 	private void Awake()
@@ -42,6 +55,8 @@ public class GameManager : MonoBehaviour
 		gridManager.Initialize();
 		pieceSpawner.Initialize();
 		uiManager.UpdateScore(currentScore);
+		uiManager.UpdateLevel(currentLevel);
+		uiManager.UpdateProgressBar(0f);
 	}
 
 	public void OnPiecePlaced( GamePiece piece )
@@ -55,6 +70,8 @@ public class GameManager : MonoBehaviour
 		}
 
 		pieceSpawner.GenerateNewPieces();
+		
+		sfxSource.PlayOneShot(placingClip);
 		CheckGameOver();
 	}
 
@@ -67,7 +84,27 @@ public class GameManager : MonoBehaviour
 	{
 		currentScore += points;
 		uiManager.UpdateScore(currentScore);
+		CheckLevelProgression();
+		sfxSource.PlayOneShot(addScoreClips[UnityEngine.Random.Range(0 , addScoreClips.Length)]);
 		onGainScore.Invoke();
+	}
+
+	private void CheckLevelProgression()
+	{
+		int targetScore = currentLevel * scorePerLevel;
+		float progress = (float) ( currentScore % scorePerLevel ) / scorePerLevel;
+
+		uiManager.UpdateProgressBar(progress);
+
+		if (currentScore >= targetScore)
+		{
+			currentLevel++;
+			sfx2Source.PlayOneShot(levelUpClips[UnityEngine.Random.Range(0 , maxExclusive: levelUpClips.Length)]);
+			musicSource.clip = musicClips[UnityEngine.Random.Range(0 , maxExclusive: musicClips.Length)];
+			musicSource.Play();
+			uiManager.UpdateLevel(currentLevel);
+			// TODO: Add level up effects
+		}
 	}
 
 	private void CheckGameOver()
@@ -82,6 +119,7 @@ public class GameManager : MonoBehaviour
 	{
 		isGameOver = true;
 		uiManager.ShowGameOver(currentScore);
+		sfx2Source.PlayOneShot(GameOverClip);
 	}
 
 	public void RestartGame()

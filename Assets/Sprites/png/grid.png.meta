@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: fe6444a04eb8dfa4c90ae43d9fac4ad9
+guid: 3492875d04421de4a9a2854270055650
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 8102659332268348761
-    second: BlackAndWhiteDimond_0
+      213: -6185343655787597505
+    second: grid_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -51,7 +51,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 680
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: BlackAndWhiteDimond_0
+      name: grid_0
       rect:
         serializedVersion: 2
-        x: 43
-        y: 31
-        width: 426
-        height: 430
+        x: 0
+        y: 0
+        width: 1920
+        height: 1080
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 955dbd3abbd627070800000000000000
-      internalID: 8102659332268348761
+      spriteID: f31701767be392aa0800000000000000
+      internalID: -6185343655787597505
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      BlackAndWhiteDimond_0: 8102659332268348761
+      grid_0: -6185343655787597505
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

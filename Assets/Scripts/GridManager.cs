@@ -22,6 +22,11 @@ public class GridManager : MonoBehaviour
 	public float bottomUISpace = 150f;   // Pixels reserved for pieces
 	public Vector2 manualOffset = Vector2.zero; // Manual fine-tuning
 	private Camera mainCamera;
+
+	[Header("SFX")]
+	public AudioClip clearRowsAndColumnsClip;
+	public AudioSource sfxSource;
+
 	public void Initialize()
 	{
 		mainCamera = Camera.main;
@@ -76,7 +81,6 @@ public class GridManager : MonoBehaviour
 			float maxCellSizeForHeight = ( screenHeight * 0.6f ) / gridHeight / 100f;  // 60% of screen height
 
 			cellSize = Mathf.Min(cellSize , maxCellSizeForWidth , maxCellSizeForHeight);
-			Debug.Log($"Mobile optimization: Cell size adjusted to {cellSize:F2}");
 		}
 	}
 
@@ -130,12 +134,15 @@ public class GridManager : MonoBehaviour
 			int y = gridPos.y + offset.y;
 
 			if (x < 0 || x >= gridWidth || y < 0 || y >= gridHeight)
+			{
 				return false;
+			}
 
 			if (grid[x , y].IsOccupied)
+			{
 				return false;
+			}
 		}
-
 		return true;
 	}
 
@@ -222,6 +229,7 @@ public class GridManager : MonoBehaviour
 		{
 			grid[x , row].ClearCell();
 		}
+		sfxSource.PlayOneShot(clearRowsAndColumnsClip);
 	}
 
 	private void ClearColumn( int col )
@@ -230,6 +238,7 @@ public class GridManager : MonoBehaviour
 		{
 			grid[col , y].ClearCell();
 		}
+		sfxSource.PlayOneShot(clearRowsAndColumnsClip);
 	}
 
 	public void HighlightValidPosition( GamePiece piece , Vector2Int gridPos )

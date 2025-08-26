@@ -6,6 +6,8 @@ public class PieceSpawner : MonoBehaviour
 	public GameObject piecePrefab;
 	public Transform[] spawnPoints;
 	public Color[] pieceColors;
+	public AudioClip spawnClip;
+	public AudioSource sfxSource;
 
 	[Header("Piece Settings")]
 	public PieceType[] availablePieces = { PieceType.LShape , PieceType.Line3 , PieceType.Line4 , PieceType.Square, PieceType.Plane};
@@ -20,6 +22,7 @@ public class PieceSpawner : MonoBehaviour
 
 	public void GenerateNewPieces()
 	{
+		sfxSource.PlayOneShot(spawnClip);
 		// Clear existing pieces
 		for (int i = 0; i < currentPieces.Length; i++)
 		{

@@ -6,6 +6,8 @@ public class UIManager : MonoBehaviour
 {
 	[Header("UI Elements")]
 	public TextMeshProUGUI scoreText;
+	public Slider progressBar;
+	public TextMeshProUGUI levelText;
 	public GameObject gameOverPanel;
 	public TextMeshProUGUI finalScoreText;
 	public Button restartButton;
@@ -31,6 +33,18 @@ public class UIManager : MonoBehaviour
 	{
 		if (scoreText != null)
 			scoreText.text = "Score: " + score.ToString();
+	}
+
+	public void UpdateProgressBar( float progress )
+	{
+		if (progressBar != null)
+			progressBar.value = progress;
+	}
+
+	public void UpdateLevel( int level )
+	{
+		if (levelText != null)
+			levelText.text = "Level: " + level.ToString();
 	}
 
 	public void ShowGameOver( int finalScore )

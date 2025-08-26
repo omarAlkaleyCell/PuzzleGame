@@ -5,9 +5,11 @@ using UnityEngine.UI;
 public class MainMenuManager : MonoBehaviour
 {
 	[Header("UI Elements")]
-	public Button playButton;
-	public Button quitButton;
-	public Text titleText;
+	[SerializeField] private Button playButton;
+	[SerializeField] private Button quitButton;
+	[SerializeField] private Button settingsButton;
+	[SerializeField] private GameObject settingsPanel;
+	[SerializeField] private Text titleText;
 
 	private void Start()
 	{
@@ -21,9 +23,9 @@ public class MainMenuManager : MonoBehaviour
 
 		if (quitButton != null)
 			quitButton.onClick.AddListener(QuitGame);
-
-		if (titleText != null)
-			titleText.text = "Puzzle Block Game";
+		
+		if (settingsButton != null)
+			settingsButton.onClick.AddListener(OpenSettings);
 	}
 
 	private void StartGame()
@@ -34,5 +36,24 @@ public class MainMenuManager : MonoBehaviour
 	private void QuitGame()
 	{
 		Application.Quit();
+	}
+
+	private void OpenSettings()
+	{
+		SetButtonsActivation(false);
+		settingsPanel.SetActive(true);
+	}
+
+	private void SetButtonsActivation(bool value)
+	{
+		playButton.gameObject.SetActive(value);
+		quitButton.gameObject.SetActive(value);
+		settingsButton.gameObject.SetActive(value);
+	}
+
+	public void CloseSettings()
+	{
+		SetButtonsActivation(true);
+		settingsPanel.SetActive(false);
 	}
 }

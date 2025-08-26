@@ -40,17 +40,11 @@ public class TetrisRainUI : MonoBehaviour
 		Application.targetFrameRate = 60;
 
 		if (tetrisPiecePrefabs == null || tetrisPiecePrefabs.Length == 0)
-		{
-			Debug.LogError("No Tetris piece prefabs assigned!");
 			return;
-		}
 
 		Canvas canvas = GetComponentInParent<Canvas>();
 		if (canvas == null)
-		{
-			Debug.LogError("TetrisRainUI must be a child of a Canvas!");
 			return;
-		}
 
 		canvasRect = canvas.GetComponent<RectTransform>();
 		if (spawnArea == null)
@@ -81,10 +75,7 @@ public class TetrisRainUI : MonoBehaviour
 		for (int i = 0; i < tetrisPiecePrefabs.Length; i++)
 		{
 			if (tetrisPiecePrefabs[i] == null)
-			{
-				Debug.LogError($"Tetris piece prefab at index {i} is null!");
 				continue;
-			}
 
 			piecePools[i] = new Queue<GameObject>();
 
@@ -136,6 +127,15 @@ public class TetrisRainUI : MonoBehaviour
 		activePieces.Clear();
 	}
 
+	public void OnPieceClicked( FallingUIPiece piece )
+	{
+		if (piece != null && activePieces.Contains(piece))
+		{
+			activePieces.Remove(piece);
+			ReturnToPool(piece);
+		}
+	}
+
 	private IEnumerator SpawnLoop()
 	{
 		while (isSpawning)
@@ -160,10 +160,7 @@ public class TetrisRainUI : MonoBehaviour
 
 		FallingUIPiece fallingComponent = piece.GetComponent<FallingUIPiece>();
 		if (fallingComponent == null)
-		{
-			Debug.LogError("FallingUIPiece component missing from pooled piece!");
 			return;
-		}
 
 		Vector2 spawnPosition = new Vector2(
 			Random.Range(-canvasHalfWidth , canvasHalfWidth) ,

@@ -64,8 +64,6 @@ public class GridManager : MonoBehaviour
 		);
 
 		transform.position = targetPosition;
-
-		Debug.Log($"Grid positioned at: {targetPosition}");
 	}
 
 	private void OptimizeForMobile()
@@ -88,7 +86,6 @@ public class GridManager : MonoBehaviour
 	{
 		if (cellPrefab == null)
 		{
-			Debug.LogError("Cell Prefab is not assigned in GridManager!");
 			return;
 		}
 
